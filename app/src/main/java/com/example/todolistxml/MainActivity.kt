@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 class MainActivity : AppCompatActivity() {
 
     private val TAG = "MainActivity"
+
+    private val COMPTEUR = "COMPTEUR"
     var compteur = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,11 +21,20 @@ class MainActivity : AppCompatActivity() {
         val textView: TextView = findViewById(R.id.textView) //Récupère la vue associé au texte
         val button: Button = findViewById(R.id.button) //Récupère la vue associé au bouton
 
+        savedInstanceState?.let { bundle -> //verification si le bundle est null ou non
+            compteur = bundle.getInt(COMPTEUR) //récupération de la donnée dans le bundle et affectation au compteur
+        }
+
         button.setOnClickListener {//Défini l'action à faire après un click
             compteur++ //Incrémente le compteur
             textView.text = "Vous avez appuyer $compteur fois sur le bouton !" //Change le texte à afficher dans la vue texte en fonction du compteur
             //textView.rotation = (compteur * 10).toFloat() //Fait évoluer la rotation du texte en fonction de la valeur du compteur
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(COMPTEUR,compteur) //Sauvegarde la valeur dans le bundle
     }
 
     override fun onStart() {
