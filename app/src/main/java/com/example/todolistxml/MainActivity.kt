@@ -8,10 +8,12 @@ import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
 
+    private val TAG = "MainActivity"
     var compteur = 0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d(TAG, "onCreate")
+
         setContentView(R.layout.activity_main) //Associe l'activité à la vue globale
 
         val textView: TextView = findViewById(R.id.textView) //Récupère la vue associé au texte
@@ -22,5 +24,30 @@ class MainActivity : AppCompatActivity() {
             textView.text = "Vous avez appuyer $compteur fois sur le bouton !" //Change le texte à afficher dans la vue texte en fonction du compteur
             //textView.rotation = (compteur * 10).toFloat() //Fait évoluer la rotation du texte en fonction de la valeur du compteur
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "onStart")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG, "onPause")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "onResume")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG, "onStop")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "onDestroy")
     }
 }
