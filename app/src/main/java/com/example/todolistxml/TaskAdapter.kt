@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 class TaskAdapter(private val taskList: List<Task>) :
     RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
+    var onItemClick: ((Task) -> Unit) = {}
+
     class TaskViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val titleTextView: TextView
         val contentTextView: TextView
@@ -31,9 +33,12 @@ class TaskAdapter(private val taskList: List<Task>) :
     override fun getItemCount(): Int = taskList.size
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
-        holder.titleTextView.text = taskList[position].title
-        holder.contentTextView.text = taskList[position].content
-        holder.priorityTextView.text = taskList[position].priority.name
+        with(taskList[position]){
+            holder.titleTextView.text = title
+            holder.contentTextView.text = content
+            holder.priorityTextView.text = priority.name
+            holder.itemView.setOnClickListener { onItemClick(this) }
+        }
     }
 
 

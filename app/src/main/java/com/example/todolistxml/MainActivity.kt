@@ -60,6 +60,14 @@ class MainActivity : AppCompatActivity() {
             )
             getResultTask.launch(intent)
         }
+
+
+        taskAdapter.onItemClick = {
+            val intent = Intent(this, EditTaskActivity::class.java)
+            intent.putExtra(EditTaskActivity.TASK, it)
+            getResultTask.launch(intent)
+        }
+
     }
 
     companion object {
