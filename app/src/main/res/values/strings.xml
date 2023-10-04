@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">TodoListXML</string>
+    <string name="hint_edittext_titre">Saisir un titre</string>
+    <string name="hint_edittext_content">Saisir le contenu</string>
+    <string name="text_button_cancel">Annuler</string>
+    <string name="text_button_validate">Confirmer</string>
 </resources>
