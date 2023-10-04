@@ -42,6 +42,7 @@ class MainActivity : AppCompatActivity() {
 
         addTaskButton.setOnClickListener {
             val intent = Intent(this, EditTaskActivity::class.java)
+            intent.putExtra(EditTaskActivity.TASK, Task(taskList.maxOf { it.id } + 1))
             startActivity(intent)
         }
 

@@ -1,5 +1,6 @@
 package com.example.todolistxml
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -21,7 +22,12 @@ class EditTaskActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_task)
 
-        currentTask = Task(1)
+        currentTask = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra(TASK, Task::class.java)
+        } else {
+            intent.getParcelableExtra(TASK)
+        } ?: Task(1)
+
 
         val titleEditText = findViewById<EditText>(R.id.titleTaskEditText)
         val contentEditText = findViewById<EditText>(R.id.contentTaskEditText)
@@ -66,5 +72,9 @@ class EditTaskActivity : AppCompatActivity() {
 
         }
 
+    }
+
+    companion object {
+        const val TASK = "TASK"
     }
 }
