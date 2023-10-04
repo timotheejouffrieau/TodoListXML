@@ -1,7 +1,7 @@
 package com.example.todolistxml
 
-enum class Priority {
-    HIGH,
-    MEDIUM,
-    LOW
+enum class Priority(val value: Int) {
+    HIGH(0),
+    MEDIUM(1),
+    LOW(2)
 }

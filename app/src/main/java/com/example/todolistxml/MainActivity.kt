@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +17,8 @@ class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivity"
 
     private val taskList = mutableListOf<Task>()
+
+    private var isPrioritySorted = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +69,20 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, EditTaskActivity::class.java)
             intent.putExtra(EditTaskActivity.TASK, it)
             getResultTask.launch(intent)
+        }
+
+        val sortListTaskButton = findViewById<FloatingActionButton>(R.id.sortList)
+
+        sortListTaskButton.setOnClickListener{
+            if(!isPrioritySorted){
+                taskList.sortBy { it.priority.value }
+                Toast.makeText(this,"Trié par priorité", Toast.LENGTH_SHORT).show()
+            } else {
+                taskList.sortBy { it.id }
+                Toast.makeText(this,"Trié par id de création", Toast.LENGTH_SHORT).show()
+            }
+            isPrioritySorted = !isPrioritySorted
+            taskAdapter.notifyDataSetChanged()
         }
 
     }
