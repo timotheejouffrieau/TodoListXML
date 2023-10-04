@@ -1,5 +1,7 @@
 package com.example.todolistxml
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +9,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
@@ -70,6 +73,19 @@ class EditTaskActivity : AppCompatActivity() {
                 //Mais on ne fait rien
             }
 
+        }
+
+        val cancelButton = findViewById<Button>(R.id.cancelButton)
+        val confirmButton = findViewById<Button>(R.id.confirmButton)
+
+        cancelButton.setOnClickListener {
+            finish()
+        }
+
+        confirmButton.setOnClickListener {
+            val intent = Intent().apply { putExtra(MainActivity.TASK_RETURN, currentTask) }
+            setResult(Activity.RESULT_OK, intent)
+            finish()
         }
 
     }

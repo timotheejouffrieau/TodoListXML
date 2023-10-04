@@ -4,10 +4,10 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class Task(
-    val id: Int,
-    val title: String= "",
-    val content: String = "",
-    val priority: Priority = Priority.LOW
+    var id: Int,
+    var title: String= "",
+    var content: String = "",
+    var priority: Priority = Priority.LOW
 ): Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
