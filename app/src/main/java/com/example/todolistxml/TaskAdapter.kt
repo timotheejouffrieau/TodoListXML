@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 //https://developer.android.com/develop/ui/views/layout/recyclerview
 
-class TaskAdapter(private val taskList: List<Task>) :
+class TaskAdapter(private var taskList: List<Task>) :
     RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
     var onItemClick: ((Task) -> Unit) = {}
@@ -23,6 +23,14 @@ class TaskAdapter(private val taskList: List<Task>) :
             contentTextView = view.findViewById(R.id.contentItem)
             priorityTextView = view.findViewById(R.id.priorityItem)
         }
+    }
+
+    fun submitList(list: List<Task>) {
+        taskList = taskList.toMutableList().apply {
+            clear()
+            addAll(list)
+        }
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {

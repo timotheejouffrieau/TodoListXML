@@ -5,8 +5,8 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,9 +16,8 @@ class MainActivity : AppCompatActivity() {
 
     private val TAG = "MainActivity"
 
-    private val taskList = mutableListOf<Task>()
 
-    private var isPrioritySorted = false
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         val taskListView = findViewById<RecyclerView>(R.id.listViewTask)
 
-        val taskAdapter = TaskAdapter(taskList)
+        val taskAdapter = TaskAdapter(viewModel.taskList.value!!)
 
         taskListView.layoutManager = LinearLayoutManager(this)
         taskListView.adapter = taskAdapter
@@ -43,15 +42,7 @@ class MainActivity : AppCompatActivity() {
                     } else {
                         it.data?.getParcelableExtra(TASK_RETURN)
                     }
-                    if (newTask != null) {
-                        taskList.find { task -> task.id == newTask.id }?.apply {
-                            id = newTask.id
-                            title = newTask.title
-                            content = newTask.content
-                            priority = newTask.priority
-                        } ?: taskList.add(newTask)
-                        taskAdapter.notifyDataSetChanged()
-                    }
+                    viewModel.insertTask(newTask)
                 }
             }
 
@@ -59,7 +50,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, EditTaskActivity::class.java)
             intent.putExtra(
                 EditTaskActivity.TASK,
-                Task((taskList.maxOfOrNull { it.id })?.plus(1) ?: 0)
+                Task((viewModel.taskList.value?.maxOfOrNull { it.id })?.plus(1) ?: 0)
             )
             getResultTask.launch(intent)
         }
@@ -73,16 +64,12 @@ class MainActivity : AppCompatActivity() {
 
         val sortListTaskButton = findViewById<FloatingActionButton>(R.id.sortList)
 
-        sortListTaskButton.setOnClickListener{
-            if(!isPrioritySorted){
-                taskList.sortBy { it.priority.value }
-                Toast.makeText(this,"Trié par priorité", Toast.LENGTH_SHORT).show()
-            } else {
-                taskList.sortBy { it.id }
-                Toast.makeText(this,"Trié par id de création", Toast.LENGTH_SHORT).show()
-            }
-            isPrioritySorted = !isPrioritySorted
-            taskAdapter.notifyDataSetChanged()
+        sortListTaskButton.setOnClickListener {
+            viewModel.sortList()
+        }
+
+        viewModel.taskList.observe(this) {
+            taskAdapter.submitList(it)
         }
 
     }
