@@ -8,6 +8,8 @@ import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -17,7 +19,15 @@ class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivity"
 
 
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: MainViewModel by viewModels(
+        factoryProducer = {
+            object : ViewModelProvider.Factory {
+                override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                    return MainViewModel(AppDatabase.getDatabase(applicationContext).taskDao) as T
+                }
+            }
+        }
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
         val taskListView = findViewById<RecyclerView>(R.id.listViewTask)
 
-        val taskAdapter = TaskAdapter(viewModel.taskList.value!!)
+        val taskAdapter = TaskAdapter()
 
         taskListView.layoutManager = LinearLayoutManager(this)
         taskListView.adapter = taskAdapter
@@ -65,11 +75,12 @@ class MainActivity : AppCompatActivity() {
         val sortListTaskButton = findViewById<FloatingActionButton>(R.id.sortList)
 
         sortListTaskButton.setOnClickListener {
-            viewModel.sortList()
+            viewModel.changeOrder()
+            taskAdapter.submitList(viewModel.sortList(viewModel.taskList.value))
         }
 
         viewModel.taskList.observe(this) {
-            taskAdapter.submitList(it)
+            taskAdapter.submitList(viewModel.sortList(it))
         }
 
     }

@@ -2,12 +2,16 @@ package com.example.todolistxml
 
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
+@Entity(tableName = "Task")
 data class Task(
-    var id: Int,
-    var title: String= "",
-    var content: String = "",
-    var priority: Priority = Priority.LOW
+    @PrimaryKey var id: Int,
+    @ColumnInfo(name = "title") var title: String = "",
+    @ColumnInfo(name = "content") var content: String = "",
+    @ColumnInfo(name = "priority") var priority: Priority = Priority.LOW
 ): Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),

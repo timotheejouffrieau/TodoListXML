@@ -8,9 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 
 //https://developer.android.com/develop/ui/views/layout/recyclerview
 
-class TaskAdapter(private var taskList: List<Task>) :
-    RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
-
+class TaskAdapter : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
+    private var taskList: List<Task> = listOf()
     var onItemClick: ((Task) -> Unit) = {}
 
     class TaskViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -41,7 +40,7 @@ class TaskAdapter(private var taskList: List<Task>) :
     override fun getItemCount(): Int = taskList.size
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
-        with(taskList[position]){
+        with(taskList[position]) {
             holder.titleTextView.text = title
             holder.contentTextView.text = content
             holder.priorityTextView.text = priority.name
